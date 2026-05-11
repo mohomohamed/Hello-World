@@ -17,7 +17,7 @@ body {
   place-items: center;
 }
 
-.app { width: min(860px, 92vw); padding: 1rem 0 2rem; }
+.app { width: min(900px, 92vw); padding: 1rem 0 2rem; }
 h1 { margin-bottom: .25rem; }
 .subtitle { opacity: .8; margin-top: 0; }
 
@@ -39,9 +39,10 @@ input, select, button {
   padding: .65rem .75rem;
 }
 button { cursor: pointer; background: #15344b; border-color: #2e8bad; font-weight: 700; }
-button:hover { filter: brightness(1.15); }
+button:disabled { opacity: .65; cursor: wait; }
 
 .visual { margin-top: 1rem; display: grid; gap: .75rem; }
+.stage { color: var(--accent); font-weight: 700; }
 .row { display: flex; justify-content: space-between; align-items: center; }
 code, strong { font-size: 1.15rem; letter-spacing: .12em; }
 .result-row strong { color: var(--accent); }
@@ -54,12 +55,7 @@ code, strong { font-size: 1.15rem; letter-spacing: .12em; }
   overflow: hidden;
   background: linear-gradient(180deg, #0b1324, #0c1730);
 }
-.wire {
-  position: absolute;
-  height: 4px;
-  background: #8da5cb;
-  filter: drop-shadow(0 0 6px #7593cc);
-}
+.wire { position: absolute; height: 4px; background: #8da5cb; filter: drop-shadow(0 0 6px #7593cc); }
 .wire.a { width: 42%; top: 38%; left: 4%; }
 .wire.b { width: 42%; top: 62%; left: 4%; }
 .wire.out { width: 43%; top: 50%; right: 4%; transform: translateY(-50%); }
@@ -72,21 +68,21 @@ code, strong { font-size: 1.15rem; letter-spacing: .12em; }
   display: grid; place-items: center;
   font-weight: 800; letter-spacing: .1em;
   background: rgba(20,37,71,.45);
-  box-shadow: 0 0 20px rgba(124,157,214,.25);
 }
 
-.animate .wire {
-  background: linear-gradient(90deg, #6b84ae, var(--accent), #6b84ae);
-  background-size: 200% 100%;
-  animation: flow 900ms linear 2;
-}
-.animate .gate {
-  animation: pulse 900ms ease-in-out 2;
-  border-color: var(--pulse);
-  box-shadow: 0 0 28px rgba(143,95,255,.6);
-}
+.bit-table { width: 100%; border-collapse: collapse; }
+.bit-table th, .bit-table td { border: 1px solid #2b3f63; padding: .35rem .5rem; text-align: center; }
+.bit-table th { background: rgba(20,33,59,.85); }
+
+.animate-convert code { animation: flicker 700ms ease-in-out; }
+.animate-gate .wire { background: linear-gradient(90deg, #6b84ae, var(--accent), #6b84ae); background-size: 200% 100%; animation: flow 850ms linear; }
+.animate-gate .gate { animation: pulse 850ms ease-in-out; border-color: var(--pulse); box-shadow: 0 0 28px rgba(143,95,255,.6); }
+.animate-output .result-row { animation: pop 650ms ease-in-out; }
+
 @keyframes flow { from { background-position: 0% 50%; } to { background-position: 200% 50%; } }
 @keyframes pulse { 50% { transform: translate(-50%, -50%) scale(1.08); } }
+@keyframes flicker { 0%,100% { opacity: 1; } 50% { opacity: .2; } }
+@keyframes pop { 50% { transform: scale(1.02); } }
 
 @media (max-width: 700px) {
   .controls { grid-template-columns: 1fr 1fr; }

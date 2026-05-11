@@ -8,9 +8,12 @@ const binB = document.getElementById('binB');
 const binR = document.getElementById('binR');
 const decR = document.getElementById('decR');
 const gateNode = document.getElementById('gateNode');
-const visual = document.querySelector('.visual');
+const visual = document.getElementById('visual');
+const stageLabel = document.getElementById('stageLabel');
+const bitRows = document.getElementById('bitRows');
 
 const to8Bit = (n) => (n & 0xff).toString(2).padStart(8, '0');
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function applyGate(a, b, op) {
   switch (op) {
@@ -24,29 +27,64 @@ function applyGate(a, b, op) {
   }
 }
 
+function clampInput(value) {
+  return Math.max(0, Math.min(255, Number(value) || 0));
+}
+
+function renderBitTable(aBits, bBits, outBits, op) {
+  bitRows.innerHTML = '';
+  for (let i = 0; i < 8; i += 1) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${7 - i}</td><td>${aBits[i]}</td><td>${bBits[i]}</td><td>${op}</td><td>${outBits[i]}</td>`;
+    bitRows.appendChild(tr);
+  }
+}
+
 function render() {
-  const a = Math.max(0, Math.min(255, Number(inputA.value) || 0));
-  const b = Math.max(0, Math.min(255, Number(inputB.value) || 0));
+  const a = clampInput(inputA.value);
+  const b = clampInput(inputB.value);
   inputA.value = a;
   inputB.value = b;
 
   const op = gate.value;
   const result = applyGate(a, b, op);
+  const aBits = to8Bit(a);
+  const bBits = to8Bit(b);
+  const rBits = to8Bit(result);
 
   gateNode.textContent = op;
-  binA.textContent = to8Bit(a);
-  binB.textContent = to8Bit(b);
-  binR.textContent = to8Bit(result);
+  binA.textContent = aBits;
+  binB.textContent = bBits;
+  binR.textContent = rBits;
   decR.textContent = String(result);
+  renderBitTable(aBits, bBits, rBits, op);
 }
 
-function animateAndRender() {
-  visual.classList.remove('animate');
-  void visual.offsetWidth;
-  visual.classList.add('animate');
+async function animateAndRender() {
+  run.disabled = true;
+  visual.classList.remove('animate-convert', 'animate-gate', 'animate-output');
   render();
+
+  stageLabel.textContent = 'Stage: Convert decimal → binary';
+  visual.classList.add('animate-convert');
+  await delay(700);
+
+  stageLabel.textContent = 'Stage: Process through gate';
+  visual.classList.remove('animate-convert');
+  void visual.offsetWidth;
+  visual.classList.add('animate-gate');
+  await delay(850);
+
+  stageLabel.textContent = 'Stage: Convert binary → decimal result';
+  visual.classList.remove('animate-gate');
+  void visual.offsetWidth;
+  visual.classList.add('animate-output');
+  await delay(650);
+
+  stageLabel.textContent = 'Stage: Done';
+  run.disabled = false;
 }
 
-[inputA, inputB, gate].forEach(el => el.addEventListener('input', render));
+[inputA, inputB, gate].forEach((el) => el.addEventListener('input', render));
 run.addEventListener('click', animateAndRender);
 render();
