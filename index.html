@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logic Gate Calculator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1>Logic Gate Calculator</h1>
+      <p class="subtitle">Type two decimal numbers, watch them become binary, flow through gates, and return to decimal.</p>
+
+      <section class="controls card">
+        <label>A (decimal)
+          <input id="inputA" type="number" min="0" max="255" value="13" />
+        </label>
+        <label>B (decimal)
+          <input id="inputB" type="number" min="0" max="255" value="7" />
+        </label>
+        <label>Gate
+          <select id="gate">
+            <option value="AND">AND</option>
+            <option value="OR">OR</option>
+            <option value="XOR" selected>XOR</option>
+            <option value="NAND">NAND</option>
+            <option value="NOR">NOR</option>
+            <option value="XNOR">XNOR</option>
+          </select>
+        </label>
+        <button id="run">Animate Calculation</button>
+      </section>
+
+      <section class="visual card">
+        <div class="row"><span>A Binary</span><code id="binA">00001101</code></div>
+        <div class="row"><span>B Binary</span><code id="binB">00000111</code></div>
+        <div class="circuit" aria-hidden="true">
+          <div class="wire a" id="wireA"></div>
+          <div class="wire b" id="wireB"></div>
+          <div class="gate" id="gateNode">XOR</div>
+          <div class="wire out" id="wireOut"></div>
+        </div>
+        <div class="row result-row"><span>Result Binary</span><code id="binR">00001010</code></div>
+        <div class="row result-row"><span>Result Decimal</span><strong id="decR">10</strong></div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
